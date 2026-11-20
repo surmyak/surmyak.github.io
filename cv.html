@@ -158,6 +158,7 @@
   @media (max-width: 480px) {
     main { padding-left: 16px; padding-right: 16px; grid-template-columns: minmax(0, 1fr); }
     .col { max-width: 100%; min-width: 0; }
+    html, body { overflow-x: clip; }   /* decorative frame handles may peek a few px past the edge — never a sideways scroll */
     .btn { font-size: 18px; padding: 9px 13px 11px; gap: 8px; }
     .btn kbd { display: none; }   /* no Esc key on a phone */
     .tool { margin-left: 0; margin-right: 0; }
