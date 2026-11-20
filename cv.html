@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CV — Denys Surmyak</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600&family=Source+Sans+3:wght@300;400;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #17457e; --ink-dim: rgba(23, 69, 126, .62); --line: rgba(23, 69, 126, .14);
+    --display: "Instrument Serif", serif; --text: "Newsreader", serif; --meta: "JetBrains Mono", ui-monospace, monospace;
+    --blue: #2f7cf6; --pad: 32px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #eef5fc; }
+  body {
+    color: var(--ink); font-family: var(--text); -webkit-font-smoothing: antialiased;
+    background-image: radial-gradient(rgba(23, 69, 126, .16) 1px, transparent 1.4px); background-size: 24px 24px; background-attachment: fixed;
+    min-height: 100vh;
+  }
+  a { color: inherit; }
+  ::selection { background: var(--blue); color: #fff; }
+  .meta { font-family: var(--meta); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; line-height: 1.5; }
+
+  /* top bar: back on the left, download on the right */
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px 12px; border: 0; cursor: pointer; text-decoration: none;
+    font-family: var(--display); font-style: italic; font-size: 21px; line-height: 1; background: #fff; color: var(--ink);
+    clip-path: polygon(0 4px, 4px 4px, 4px 0, calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px));
+    box-shadow: 0 8px 22px rgba(10, 50, 110, .14);
+    background-image: linear-gradient(var(--ink), var(--ink)); background-repeat: no-repeat; background-size: 0% 100%;
+    transition: background-size .35s steps(8), color 0s .14s;
+  }
+  .btn .ic { font-family: var(--meta); font-style: normal; font-size: 15px; }
+  .btn:hover, .btn:focus-visible { background-size: 100% 100%; color: #fff; outline: none; }
+  .btn.back:hover .ic { animation: nudge .6s steps(4) infinite; }
+  @keyframes nudge { 50% { transform: translateX(-4px); } }
+
+  /* the sheet, shown as a selected frame on the canvas */
+  main { padding: 28px var(--pad) 96px; display: grid; place-items: start center; }
+  .col { width: min(980px, 100%); }
+  .frame { position: relative; width: 100%; }
+  /* actions sit right on top of the sheet, edge to edge, and stay in view while you scroll */
+  .tool { position: sticky; top: 14px; z-index: 6; display: flex; justify-content: space-between; align-items: center; gap: 16px; margin: 0 -6px 30px; }
+  .tool .mid { color: var(--ink-dim); }
+  /* the sticky bar gets its own frosted strip across the screen: content blurs under a faint pixel texture,
+     and the bottom edge dissolves through three ordered-dither rows (75% → 50% → 25%) instead of a hard line */
+  .tool::before {
+    content: ""; position: absolute; z-index: -1; top: -14px; bottom: -30px; left: calc(50% - 50vw); width: 100vw;
+    background-color: rgba(238, 245, 252, .82);
+    background-image: linear-gradient(90deg, rgba(23, 69, 126, .05) 1px, transparent 1px), linear-gradient(rgba(23, 69, 126, .05) 1px, transparent 1px);
+    background-size: 4px 4px;
+    backdrop-filter: blur(10px) saturate(1.2); -webkit-backdrop-filter: blur(10px) saturate(1.2);
+    -webkit-mask: linear-gradient(#000, #000) top / 100% calc(100% - 24px) no-repeat,
+                  url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2232%22%20height%3D%228%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%228%22%20height%3D%228%22/%3E%3Crect%20x%3D%228%22%20y%3D%220%22%20width%3D%228%22%20height%3D%228%22/%3E%3Crect%20x%3D%2216%22%20y%3D%220%22%20width%3D%228%22%20height%3D%228%22/%3E%3Crect%20x%3D%2224%22%20y%3D%220%22%20width%3D%228%22%20height%3D%228%22/%3E%3C/svg%3E") left calc(100% - 16px) / 32px 8px repeat-x,
+                  url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2232%22%20height%3D%228%22%3E%3Crect%20x%3D%228%22%20y%3D%220%22%20width%3D%228%22%20height%3D%228%22/%3E%3Crect%20x%3D%2224%22%20y%3D%220%22%20width%3D%228%22%20height%3D%228%22/%3E%3C/svg%3E") left calc(100% - 8px) / 32px 8px repeat-x,
+                  url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2232%22%20height%3D%228%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%228%22%20height%3D%228%22/%3E%3Crect%20x%3D%2216%22%20y%3D%220%22%20width%3D%228%22%20height%3D%228%22/%3E%3C/svg%3E") left calc(100% - 0px) / 32px 8px repeat-x;
+            mask: linear-gradient(#000, #000) top / 100% calc(100% - 24px) no-repeat,
+                  url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2232%22%20height%3D%228%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%228%22%20height%3D%228%22/%3E%3Crect%20x%3D%228%22%20y%3D%220%22%20width%3D%228%22%20height%3D%228%22/%3E%3Crect%20x%3D%2216%22%20y%3D%220%22%20width%3D%228%22%20height%3D%228%22/%3E%3Crect%20x%3D%2224%22%20y%3D%220%22%20width%3D%228%22%20height%3D%228%22/%3E%3C/svg%3E") left calc(100% - 16px) / 32px 8px repeat-x,
+                  url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2232%22%20height%3D%228%22%3E%3Crect%20x%3D%228%22%20y%3D%220%22%20width%3D%228%22%20height%3D%228%22/%3E%3Crect%20x%3D%2224%22%20y%3D%220%22%20width%3D%228%22%20height%3D%228%22/%3E%3C/svg%3E") left calc(100% - 8px) / 32px 8px repeat-x,
+                  url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2232%22%20height%3D%228%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%228%22%20height%3D%228%22/%3E%3Crect%20x%3D%2216%22%20y%3D%220%22%20width%3D%228%22%20height%3D%228%22/%3E%3C/svg%3E") left calc(100% - 0px) / 32px 8px repeat-x;
+  }
+  .btn kbd { font: 10px/1 var(--meta); letter-spacing: .06em; padding: 3px 5px; border: 1px solid currentColor; opacity: .5; margin-left: 4px; }
+  .btn.primary { background-color: #17457e; color: #fff; background-image: linear-gradient(#2f7cf6, #2f7cf6); }
+  .btn.primary:hover, .btn.primary:focus-visible { color: #fff; }
+  .sel { position: absolute; inset: -6px; border: 1.5px solid var(--blue); pointer-events: none; }
+  .sel i { position: absolute; width: 9px; height: 9px; background: #fff; border: 1.5px solid var(--blue); }
+  .sel i:nth-child(1) { left: -5px; top: -5px; } .sel i:nth-child(2) { right: -5px; top: -5px; }
+  .sel i:nth-child(3) { left: -5px; bottom: -5px; } .sel i:nth-child(4) { right: -5px; bottom: -5px; }
+  .sel span { position: absolute; left: 0; top: 100%; margin-top: 12px; color: var(--blue); font: 12px/1 var(--meta); letter-spacing: .02em; white-space: nowrap; }
+  .sel b {
+    position: absolute; left: 50%; top: 100%; margin-top: 12px; transform: translateX(-50%); white-space: nowrap;
+    background: var(--blue); color: #fff; font: 500 11px/1 var(--meta); letter-spacing: .03em; padding: 4px 7px; border-radius: 3px;
+  }
+  /* ---------- the CV sheet: classic résumé — black on white, sans fonts, two columns (facts | story) ---------- */
+  .sheet {
+    --k: #111111; --k2: #6b6b6b; --k3: #9a9a9a;
+    background: #fff; color: var(--k); padding: 56px 64px 60px; box-shadow: 0 30px 80px rgba(23, 69, 126, .1);
+    font-family: "Source Sans 3", system-ui, sans-serif; font-weight: 300; font-size: 16px; line-height: 1.45;
+  }
+  .sheet ::selection { background: #111; color: #fff; }
+  .cv-name { font-family: "Barlow", sans-serif; font-weight: 600; font-size: clamp(40px, 5vw, 56px); line-height: 1; letter-spacing: .06em; text-transform: uppercase; }
+  .cv-role { margin-top: 6px; font-family: "Barlow", sans-serif; font-weight: 500; font-size: 26px; color: var(--k2); }
+  .cv-contact { margin-top: 12px; color: var(--k2); font-size: 15px; display: flex; flex-wrap: wrap; gap: 8px 22px; list-style: none; }
+  .cv-contact li, .cv-contact a { display: inline-flex; align-items: center; gap: 7px; }
+  .cv-contact .ci { width: 15px; height: 15px; flex: none; }
+  .cv-contact a.lk { color: #2563eb; font-weight: 400; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: rgba(37, 99, 235, .45); }
+  .cv-contact a.lk:hover { color: #1d4ed8; text-decoration-color: currentColor; }
+  .cv-sum { margin-top: 18px; max-width: 46em; font-size: 17px; line-height: 1.55; color: #333; }
+  .cv-bul { margin-top: 10px; padding-left: 18px; display: grid; gap: 8px; color: #333; }
+  .cv-bul li::marker { color: var(--k3); }
+  .cv-bul b { font-weight: 600; color: var(--k); }
+  /* experience entry: logo column | company + dates → role · company type → scope → achievements */
+  .cv-item.xp { display: block; }
+  .xp .co { display: inline-flex; align-items: center; gap: 10px; }
+  .cv-item.xp + .cv-item.xp { margin-top: 22px; padding-top: 22px; border-top: 1px solid #ececec; }
+  .xp img.logo { width: 24px; height: 24px; border-radius: 5px; }
+  .xp .role, .xp .scope, .xp .cv-bul { margin-left: 34px; }
+  .xp .t { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; font-size: 20px; line-height: 1.2; }
+  .xp .t b { font-family: "Barlow", sans-serif; font-weight: 600; letter-spacing: .01em; }
+  .xp .t .when { font-size: 13px; color: var(--k3); font-weight: 400; white-space: nowrap; }
+  .xp .role { margin-top: 3px; font-size: 15px; font-weight: 400; color: var(--k); }
+  .xp .role span { display: block; margin-top: 2px; font-size: 13px; color: var(--k3); font-weight: 300; }
+  .xp .scope { margin-top: 10px; color: #222; font-weight: 400; }
+  .xp .cv-bul { margin-top: 10px; gap: 6px; font-size: 15px; color: #555; }
+  /* projects grouped by where they were done */
+  .pgroup + .pgroup { margin-top: 30px; }   /* groups far apart, items inside close together */
+  .pg { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 17px; padding-bottom: 8px; border-bottom: 1px solid #e6e6e6; }
+  .pg a { color: inherit; font-weight: 400; }
+  .prow { padding: 8px 0 0 32px; }
+  .pg + .prow { padding-top: 12px; }
+  .pn { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; }
+  .pn b { font-weight: 600; }
+  .pn span { color: var(--k3); font-size: 13px; white-space: nowrap; }
+  .prow > p:not(.pn) { color: #333; margin-top: 0; line-height: 1.4; }
+  .pnote { padding: 10px 0 0 32px; color: var(--k2); font-size: 14px; }
+  .cv-cols { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 56px; margin-top: 36px; padding-top: 32px; border-top: 1px solid #ececec; }
+  .cv-h { font-family: "Barlow", sans-serif; font-weight: 600; font-size: 24px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 14px; font-size: 19px; }
+  .cv-sec + .cv-sec { margin-top: 34px; }
+  .cv-sub { font-weight: 600; }
+  .cv-sub + .cv-sub, .cv-list + .cv-sub, .cv-sec p + .cv-sub { margin-top: 20px; }   /* air between sub-groups */
+  .cv-sub { margin-bottom: 4px; }
+  .cv-list { list-style: none; }
+  .cv-item + .cv-item { margin-top: 30px; }
+  .cv-item .t { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 17px; }
+  .cv-item .t .sep { color: var(--k3); font-weight: 300; }
+  .cv-item .when { color: var(--k3); font-size: 13px; margin-top: 1px; }
+  .cv-item p { margin-top: 4px; color: #333; }
+  .cv-item p b { font-weight: 600; color: var(--k); }
+  .cv-item .co-line { color: var(--k2); font-style: italic; margin-top: 6px; }
+  /* company logo — placeholder tile until the real logo (swap the <i> for an <img>) */
+  .logo { width: 22px; height: 22px; flex: none; display: grid; place-items: center; font: 600 9px/1 "Barlow", sans-serif; font-style: normal; letter-spacing: .04em;
+    color: var(--k2); background: #f2f2f2; border: 1px dashed #c8c8c8; }
+  .picon { display: block; }
+  img.logo { border: 0; border-radius: 4px; object-fit: cover; background: none; }
+  .job p { margin-top: 8px; font-size: 16px; line-height: 1.55; max-width: 34em; }
+  .job p b { font-weight: 500; }
+  .plain { font-size: 16px; line-height: 1.6; max-width: 34em; }
+  .plain + .plain { margin-top: 6px; }
+  .plain .k { color: var(--ink-dim); }
+
+  /* page transition: sky-blue pixels cover the screen and dissolve top to bottom */
+  #px { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 50; pointer-events: none; }
+  .reveal { opacity: 0; transition: opacity .22s; }
+  .in .reveal { opacity: 1; }
+
+  @media (max-width: 720px) {
+    :root { --pad: 18px; }
+    .tool .mid { display: none; }
+    .sheet { padding: 34px 24px 40px; }
+    .cv-cols { grid-template-columns: 1fr; gap: 40px; margin-top: 44px; }
+    .sheet { padding: 44px 26px 52px; }
+  }
+  @media (max-width: 960px) { .cv-cols { grid-template-columns: 1fr; gap: 48px; } }   /* narrow windows: one column, no squeezed text */
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+  /* print / PDF: just the sheet, one page exactly its size, contact labels stay clickable links */
+  @page { size: 980px 1530px; margin: 0; }
+  @media print {
+    html, body { background: #fff !important; background-image: none !important; min-height: 0; }
+    .tool, .sel, #px { display: none !important; }
+    main { padding: 0; display: block; }
+    .col { width: 980px; }
+    .sheet { box-shadow: none; padding: 56px 64px 60px; }
+    .cv-cols { grid-template-columns: 240px minmax(0, 1fr) !important; gap: 56px !important; margin-top: 36px !important; }   /* keep the two desktop columns in print */
+    .cv-name { font-size: 56px; }
+    .reveal { opacity: 1 !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="col">
+  <nav class="tool reveal" aria-label="CV actions">
+    <a class="btn back" href="index.html#about-back" id="back"><span class="ic" aria-hidden="true">←</span>Back<kbd>Esc</kbd></a>
+    <p class="mid meta">Denys Surmyak · CV</p>
+    <a class="btn primary" href="assets/cv.pdf" download="Denys-Surmyak-CV.pdf">Download PDF<span class="ic" aria-hidden="true">↓</span></a>
+  </nav>
+  <div class="frame reveal">
+    <div class="sel" aria-hidden="true"><i></i><i></i><i></i><i></i><span># CV — Denys Surmyak.pdf</span><b>CV · 1 page</b></div>
+    <article class="sheet">
+      <header>
+        <h1 class="cv-name">Denys Surmyak</h1>
+        <p class="cv-role">UX/UI Designer</p>
+        <ul class="cv-contact">
+          <li><svg class="ci" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 15s5-4.6 5-8.5A5 5 0 0 0 3 6.5C3 10.4 8 15 8 15z" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="6.5" r="1.8" fill="currentColor"/></svg>Ukraine · Lviv</li>
+          <li><a class="lk" href="mailto:surmyakd@gmail.com"><svg class="ci" viewBox="0 0 16 16" aria-hidden="true"><rect x="1.75" y="3.25" width="12.5" height="9.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M2.5 4.5 8 8.75l5.5-4.25" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>Email</a></li>
+          <li><a class="lk" href="https://t.me/densmk" target="_blank" rel="noopener"><svg class="ci" viewBox="0 0 16 16" aria-hidden="true"><path d="M14.6 2.3 1.6 7.3c-.6.25-.6 1.05.03 1.25l3.2 1 1.25 3.9c.18.55.88.7 1.27.27l1.8-1.9 3.3 2.45c.45.33 1.1.08 1.22-.47l2.2-10.4c.15-.7-.5-1.3-1.17-1.1zM6.1 9.2l6-4.2-4.8 5.1-.25 2.1z" fill="currentColor"/></svg>Telegram</a></li>
+          <li><a class="lk" href="https://www.linkedin.com/in/denys-surmyak/" target="_blank" rel="noopener"><svg class="ci" viewBox="0 0 16 16" aria-hidden="true"><rect x="1" y="1" width="14" height="14" rx="2.5" fill="currentColor"/><path d="M4.2 6.4h1.9v5.4H4.2zM5.15 3.6a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2zM7.3 6.4h1.8v.75c.3-.5.95-.9 1.85-.9 1.6 0 2.05 1 2.05 2.4v3.15h-1.9V9.1c0-.65-.15-1.2-.85-1.2-.75 0-1.05.55-1.05 1.25v2.65H7.3z" fill="#fff"/></svg>LinkedIn</a></li>
+        </ul>
+        <p class="cv-sum">Product designer for web and mobile. I think in terms of the product, not just screens — the problem, the logic behind it, user scenarios and edge cases — and turn complex requirements into clear structure and UI, through to developer handoff.</p>
+      </header>
+
+      <div class="cv-cols">
+        <aside>
+          <section class="cv-sec">
+            <h2 class="cv-h">Education</h2>
+            <p class="cv-sub">Ivan Franko National University of Lviv</p>
+            <p>Bachelor’s degree,<br>Management and Administration<br>2019 – 2023</p>
+          </section>
+          <section class="cv-sec">
+            <h2 class="cv-h">Skills</h2>
+            <p class="cv-sub">Product &amp; UX</p>
+            <p>Problem framing, UX research &amp; audit, information architecture, user flows, developer specs</p>
+            <p class="cv-sub">UI</p>
+            <p>Design systems, dashboards &amp; data, interactive prototypes</p>
+            <p class="cv-sub">Tools</p>
+            <p>Figma, FigJam, Framer, Notion</p>
+            <p>Claude Code, ChatGPT, Figma AI</p>
+            <p class="cv-sub">AI workflow</p>
+            <p>I use AI in my everyday process — to speed up research and analysis and to turn my designs into working prototypes.</p>
+          </section>
+          <section class="cv-sec">
+            <h2 class="cv-h">Languages</h2>
+            <p>Ukrainian — native<br>English — B2<br>German — A2<br>Polish — A2</p>
+          </section>
+        </aside>
+
+        <div>
+          <section class="cv-sec">
+            <h2 class="cv-h">Experience</h2>
+            <div class="cv-item xp">
+              <div>
+                <p class="t"><span class="co"><img class="logo" src="assets/logo-zade.png" alt="" width="24" height="24"><b>Zade Space</b></span><span class="when">Jul 2026 – Dec 2026 · 6 months</span></p>
+                <p class="role">UX/UI Designer <span>Design agency building client products and MVPs</span></p>
+                <p class="scope">Owned design tasks on client products from the problem to developer handoff, across web and mobile.</p>
+                <ul class="cv-bul">
+                <li>Turned complex product requirements into clear logic, information architecture and UI.</li>
+                <li>Contributed to products shipped as MVPs to validate demand and support fundraising.</li>
+              </ul>
+              </div>
+            </div>
+            <div class="cv-item xp">
+              <div>
+                <p class="t"><span class="co"><img class="logo" src="assets/logo-spectrium.png" alt="" width="24" height="24"><b>Spectrium LLP</b></span><span class="when">Jan 2026 – Jul 2026 · 7 months</span></p>
+                <p class="role">UX/UI Designer <span>UK-based IT company delivering web products — design, frontend and backend</span></p>
+                <p class="scope">Designed a CRM and the company’s corporate website.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="cv-sec">
+            <h2 class="cv-h">Projects</h2>
+
+            <div class="pgroup">
+              <p class="pg"><img class="logo" src="assets/logo-zade.png" alt="" width="22" height="22">Zade Space</p>
+              <div class="prow"><p class="pn"><b>Finance Platform</b><span>Web &amp; mobile</span></p><p>Shaped the product logic and information architecture — how data is structured, connected and explained to the user. Designed the main dashboard and data views, used research to ground the structure, and built interactive prototypes to check key flows.</p></div>
+              <div class="prow"><p class="pn"><b>Care App</b><span>Mobile</span></p><p>Designed key mobile flows and screens from a clear client brief, working within the existing UI kit to keep the product consistent. Prepared detailed specs so developers could build without guesswork.</p></div>
+            </div>
+
+            <div class="pgroup">
+              <p class="pg"><img class="logo" src="assets/logo-spectrium.png" alt="" width="22" height="22">Spectrium LLP</p>
+              <div class="prow"><p class="pn"><b>CRM</b><span>Web</span></p><p>Designed the core flows and screens, plus a set of reusable components so new sections could be added consistently.</p></div>
+              <div class="prow"><p class="pn"><b>Corporate website</b><span>Web</span></p><p>Planned the page structure and content hierarchy, then took it from wireframes to the final UI.</p></div>
+            </div>
+
+            <div class="pgroup">
+              <p class="pg"><svg class="logo picon" viewBox="0 0 22 22" aria-hidden="true"><rect width="22" height="22" rx="4" fill="#111"/><path fill="#fff" shape-rendering="crispEdges" d="M7 5h1v1H7zM7 6h2v1H7zM7 7h3v1H7zM7 8h4v1H7zM7 9h5v1H7zM7 10h6v1H7zM7 11h7v1H7zM7 12h4v1H7zM7 13h1v1H7zM9 13h2v1H9zM7 14h1v1H7zM10 14h2v1h-2zM10 15h2v1h-2z"/><rect x="14" y="5" width="2" height="2" fill="#2f7cf6"/><rect x="16" y="3" width="1" height="1" fill="#2f7cf6"/></svg>Personal concepts</p>
+              <div class="prow"><p class="pn"><b>FlowOps · NOMAD OS · CENTRA · Shift · OAX Systems</b></p></div>
+              <p class="pnote">SaaS, dashboard, AI and mobile concepts — full cycle on each, from research to prototype.</p>
+            </div>
+          </section>
+        </div>
+      </div>
+    </article>
+  </div>
+  </div>
+</main>
+
+
+
+<script>
+/* Arrives already turned (the home page did the turn). Back / Esc: this page turns away from the top-left corner,
+   revealing the blue-white sky of About underneath, then the home page is back. */
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // page turn in pixels: a fold line sweeps across the screen from one corner; behind it lies the next page,
+  // the turned-over flap (the back of the sheet) rides on top of the fold with a soft shadow
+  const PEEL = (() => {
+    const DPR = Math.min(2, devicePixelRatio || 1);
+    const cv = document.createElement('canvas'); cv.setAttribute('aria-hidden', 'true');
+    cv.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;z-index:95;pointer-events:none';
+    document.body.appendChild(cv);
+    const x = cv.getContext('2d');
+    const hash = (a, b) => { const v = Math.sin(a * 127.1 + b * 311.7) * 43758.5453; return v - Math.floor(v); };
+    // under: colour of the page being revealed at (cx, cy); fromBR: the corner the turn starts at
+    function draw(t, under, fromBR) {
+      const w = innerWidth, h = innerHeight;
+      if (cv.width !== Math.round(w * DPR) || cv.height !== Math.round(h * DPR)) { cv.width = Math.round(w * DPR); cv.height = Math.round(h * DPR); }
+      x.setTransform(DPR, 0, 0, DPR, 0, 0); x.clearRect(0, 0, w, h);
+      if (t <= 0) return;
+      const S = 8, D = (w + h) / Math.SQRT2, s = t * D * .56;          // fold distance from the corner (flap covers up to 2s)
+      for (let j = 0; j * S < h; j++) for (let i = 0; i * S < w; i++) {
+        const cx = i * S + S / 2, cy = j * S + S / 2;
+        const d = fromBR ? ((w - cx) + (h - cy)) / Math.SQRT2 : (cx + cy) / Math.SQRT2;
+        if (d < s) { x.fillStyle = under(cx, cy); x.fillRect(i * S, j * S, S, S); }
+        else if (d < 2 * s) {                                          // the flap: back of the sheet, lit towards the fold
+          const k = (d - s) / s;
+          const g = Math.round(222 - 34 * (1 - k)), b2 = Math.round(236 - 20 * (1 - k));
+          x.fillStyle = `rgb(${g - 18},${g - 4},${b2})`; x.fillRect(i * S, j * S, S, S);
+          if (hash(i, j) < .08) { x.fillStyle = 'rgba(255,255,255,.35)'; x.fillRect(i * S, j * S, S, S); }
+        } else if (d < 2 * s + 18) {                                   // shadow the flap throws on the page below
+          x.fillStyle = `rgba(13,44,108,${.16 * (1 - (d - 2 * s) / 18)})`; x.fillRect(i * S, j * S, S, S);
+        }
+      }
+    }
+    function run(ms, under, fromBR) {
+      return new Promise(res => {
+        const t0 = performance.now(); let done = false;
+        const fin = () => { if (done) return; done = true; draw(1, under, fromBR); res(); };
+        const step = now => { if (done) return; const k = Math.min(1, (now - t0) / ms), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2; draw(e, under, fromBR); k < 1 ? requestAnimationFrame(step) : fin(); };
+        requestAnimationFrame(step);
+        setTimeout(fin, ms + 400);   // if frames stall (background tab), still finish
+      });
+    }
+    return { run, draw, clear: () => x.clearRect(0, 0, cv.width, cv.height) };
+  })();
+  // the CV page as it will appear: white sheet on the dotted canvas
+  const cvUnder = (cx, cy) => {
+    const pad = innerWidth <= 720 ? 18 : 32, w = Math.min(820, innerWidth - pad * 2), l = (innerWidth - w) / 2;
+    return cx >= l && cx <= l + w && cy >= 101 ? '#ffffff' : '#eef5fc';
+  };
+
+  document.body.classList.add('in');
+  const about = () => '#cbe8fb';
+  function leave(e) {
+    e && e.preventDefault();
+    const back = () => {
+      const sameSite = document.referrer && new URL(document.referrer).origin === location.origin;
+      if (sameSite && history.length > 1) history.back(); else location.href = 'index.html#about-back';
+    };
+    if (reduce) return back();
+    PEEL.run(460, about, false).then(back);
+  }
+  addEventListener('pageshow', e => { if (e.persisted) PEEL.clear(); });
+  document.getElementById('back').addEventListener('click', leave);
+  addEventListener('keydown', e => { if (e.key === 'Escape') leave(); });
+})();
+</script>
+</body>
+</html>

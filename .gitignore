@@ -1,0 +1,16 @@
+# system / tools
+.DS_Store
+.claude/
+
+# drafts and explorations — not part of the site
+logo-explore*.html
+brand-preview.html
+favicon-explore.html
+loader-cookies.html
+case.html
+
+# private notes and reference material
+CASE-STUDY-GUIDE.md
+README.md
+references/
+assets/cair/flows/

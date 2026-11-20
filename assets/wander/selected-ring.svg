@@ -1,0 +1,6 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="88" height="27.2" viewBox="0 0 88 27.2" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="stroke0_0_82" fill="white">
+<path d="M88 13.6C88 21.1111 68.3005 27.2 44 27.2C19.6995 27.2 0 21.1111 0 13.6C0 6.08893 19.6995 0 44 0C68.3005 0 88 6.08893 88 13.6Z"/>
+</mask>
+<ellipse id="Selected ring" cx="44" cy="13.6" rx="44" ry="13.6" stroke-width="6" stroke="#2F6BE0" mask="url(#stroke0_0_82)"/>
+</svg>

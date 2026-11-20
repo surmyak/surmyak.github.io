@@ -1,0 +1,7 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="27" height="13" viewBox="0 0 27 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="icon/battery">
+<path id="Vector" d="M4 0.5H19C20.933 0.5 22.5 2.067 22.5 4V9C22.5 10.933 20.933 12.5 19 12.5H4C2.067 12.5 0.5 10.933 0.5 9V4C0.5 2.067 2.067 0.5 4 0.5Z" stroke="#0E1726" stroke-opacity="0.4"/>
+<path id="Vector_2" d="M19 2H4C2.89543 2 2 2.89543 2 4V9C2 10.1046 2.89543 11 4 11H19C20.1046 11 21 10.1046 21 9V4C21 2.89543 20.1046 2 19 2Z" fill="#0E1726"/>
+<path id="Vector_3" d="M24.5 4.5V8.5C25.3 8.2 25.8 7.4 25.8 6.5C25.8 5.6 25.3 4.8 24.5 4.5Z" fill="#0E1726" fill-opacity="0.45"/>
+</g>
+</svg>

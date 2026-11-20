@@ -1,0 +1,12 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="393" height="464" viewBox="0 0 393 464" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Shallow water" filter="url(#filter0_f_0_87)">
+<path id="Vector" d="M56 300C62 293.7 84.3 286 100 282C115.7 278 134 279.3 150 276C166 272.7 180.3 267.7 196 262C211.7 256.3 228.3 248.7 244 242C259.7 235.3 275.7 229 290 222C304.3 215 317.7 205.3 330 200C342.3 194.7 359.3 187.7 364 190C368.7 192.3 364.3 207 358 214C351.7 221 336.3 225 326 232C315.7 239 304 247 296 256C288 265 282.7 275.7 278 286C273.3 296.3 272.3 307.3 268 318C263.7 328.7 258 339.3 252 350C246 360.7 238.7 372 232 382C225.3 392 218.7 402.3 212 410C205.3 417.7 199.3 426.3 192 428C184.7 429.7 176.7 425 168 420C159.3 415 149.3 406.3 140 398C130.7 389.7 121 379.3 112 370C103 360.7 94 350.3 86 342C78 333.7 69 327 64 320C59 313 50 306.3 56 300Z" stroke-width="16" stroke-linejoin="round" stroke="white" stroke-opacity="0.7"/>
+</g>
+<defs>
+<filter id="filter0_f_0_87" x="-6" y="-6" width="405" height="476" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="3" result="effect1_foregroundBlur_0_87"/>
+</filter>
+</defs>
+</svg>
