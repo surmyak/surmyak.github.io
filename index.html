@@ -333,10 +333,10 @@
     background: var(--c0, #0d2350); cursor: pointer; isolation: isolate;
   }
   .proj canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-  .proj .info { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-top: 14px; }
+  .proj .info { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 16px; margin-top: 14px; }
   .proj .name { white-space: nowrap; font-family: var(--display); font-size: 28px; line-height: 1; letter-spacing: -.01em; }
   .proj .name .n { font-family: var(--meta); font-size: 12px; letter-spacing: .06em; margin-right: 10px; vertical-align: .35em; color: var(--ink-dim); }
-  .proj .tags { color: var(--ink-dim); text-align: right; }
+  .proj .tags { color: var(--ink-dim); text-align: right; white-space: nowrap; margin-left: auto; }   /* each tag line stays whole; narrow cards drop the tags under the name */
   /* layout: row 1 — Wander + a big FlowOps; row 2 — Care App, Shift, Nomad OS, staggered. Each card keeps its own aspect (--ar inline) */
   .p1 { grid-column: 1 / 5;  grid-row: 1; }
   .p2 { grid-column: 6 / 12; grid-row: 1; margin-top: 14vh; margin-left: 2vw; }

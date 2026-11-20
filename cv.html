@@ -155,6 +155,16 @@
   }
   @media (max-width: 960px) { .cv-cols { grid-template-columns: 1fr; gap: 48px; } }   /* narrow windows: one column, no squeezed text */
   @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+  @media (max-width: 480px) {
+    main { padding-left: 16px; padding-right: 16px; grid-template-columns: minmax(0, 1fr); }
+    .col { max-width: 100%; min-width: 0; }
+    .btn { font-size: 18px; padding: 9px 13px 11px; gap: 8px; }
+    .btn kbd { display: none; }   /* no Esc key on a phone */
+    .tool { margin-left: 0; margin-right: 0; }
+    .sel { inset: -4px; }
+    .sheet { padding: 32px 20px 40px; }
+    .cv-name { font-size: 34px; }
+  }
   /* print / PDF: just the sheet, one page exactly its size, contact labels stay clickable links */
   @page { size: 980px 1530px; margin: 0; }
   @media print {
@@ -208,6 +218,7 @@
             <p class="cv-sub">Tools</p>
             <p>Figma, FigJam, Framer, Notion</p>
             <p>Claude Code, ChatGPT, Figma AI</p>
+            <p>GitHub, GitLab, Vercel</p>
             <p class="cv-sub">AI workflow</p>
             <p>I use AI in my everyday process — to speed up research and analysis and to turn my designs into working prototypes.</p>
           </section>

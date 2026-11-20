@@ -315,6 +315,7 @@
     .ds { grid-template-columns: repeat(4, 1fr); }
     .pin { position: relative; top: 0; }
     .story li { min-height: auto; opacity: 1; }
+    .story li:last-child { min-height: auto; }   /* no empty tail under the last step when the screen isn't pinned */
     .insights li { grid-template-columns: 40px 1fr; }
   }
 
@@ -397,7 +398,7 @@
   .pc:hover .art.cov img { transform: scale(1.03); }
 
   /* more projects: one big slide at a time, arrows + a pill pager */
-  .car { display: grid; }
+  .car { display: grid; overflow-x: clip; }   /* slides waiting off to the side must never widen the page */
   .sl { grid-area: 1 / 1; display: block; color: inherit; text-decoration: none; opacity: 0; visibility: hidden; transform: translateX(var(--from, 48px));
     transition: opacity .45s ease, transform .6s cubic-bezier(.2, .8, .2, 1), visibility 0s .6s; }
   .sl.on { opacity: 1; visibility: visible; transform: none; transition: opacity .45s ease, transform .6s cubic-bezier(.2, .8, .2, 1); }
@@ -589,6 +590,9 @@
     .pair.mob .plq { row-gap: 64px; }
     .ph3 .pf.wide { width: 70%; }
   }
+  @media (max-width: 600px), (hover: none) { nav kbd, .btn kbd, a kbd { display: none; } }   /* no Esc key hint on touch screens */
+  @media (hover: none) { .sl.on .sl-cap { opacity: 1; transform: none; } .sl.on .sl-art::after { opacity: 1; } }   /* touch screens can't hover: the project name is always shown on the current slide */
+  @media (max-width: 600px) { .sl-cap { left: 16px; bottom: 14px; } .sl-cap .nm { font-size: 26px; } }
 </style>
 </head>
 <body>
