@@ -1455,7 +1455,8 @@
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hero = document.getElementById('hero');
   const stage = document.getElementById('stage');
-  let stageVis = true, aboutVis = true, camSettled = false, fxClear = false;
+  let stageVis = true, aboutVis = true, camSettled = false, fxClear = false, lastFx = 0, lastFade = -1;
+  const coarse = matchMedia('(pointer: coarse)').matches;
   new IntersectionObserver(es => { stageVis = es[0].isIntersecting; }).observe(stage);
   new IntersectionObserver(es => { aboutVis = es[0].isIntersecting; }).observe(document.querySelector('.about-wrap'));
   const fx = document.getElementById('fx');
@@ -1641,7 +1642,7 @@
       const b0 = .23 - k * .095, b1 = b0 - .085, by = -.54 * s, y = ty * s;
       return [[b0, by], [tx + .036, y + .06], [tx, y], [tx - .036, y + .06], [b1, by]];
     });
-    return { arm, fingers };
+    return { arm, fingers, armTop: -.6 * s, fingTop: -.53 * s };
   }
   function inBird(x, y, shp) {
     if (((x - .04) / .44) ** 2 + (y / .13) ** 2 <= 1) return true;   // body
@@ -1649,7 +1650,9 @@
     if (x > .54 && inPoly(x, y, BEAK)) return true;
     if (x < -.3 && inPoly(x, y, TAIL)) return true;
     const wy = -Math.abs(y);                                          // both wings
-    if (inPoly(x, wy, shp.arm)) return true;
+    if (x < -.36 || x > .28 || wy > -.06) return false;               // outside every wing feather: skip the polygon tests
+    if (wy >= shp.armTop && inPoly(x, wy, shp.arm)) return true;
+    if (wy > shp.fingTop) return false;                               // fingers only start where the inner wing ends
     for (const f of shp.fingers) if (inPoly(x, wy, f)) return true;
     return false;
   }
@@ -1701,6 +1704,7 @@
       for (let i = Math.floor((x - R) / c); i <= Math.ceil((x + R) / c); i++) {
         const dx = (i * c + c / 2 - x) * b.dir, dy = j * c + c / 2 - y;
         const lx = (dx * co + dy * si) / L, ly = (-dx * si + dy * co) / L;
+        if (lx < -.76 || lx > .7 || ly < -1.4 || ly > 1.4) continue;   // outside the bird's bounding box
         if (!inBird(lx, ly, shp)) continue;
         const hsh = cellHash(i * b.dir, j);
         ctx.fillStyle = hsh > .978 ? (hsh > .99 ? '#ff7a45' : '#5fe08a') : (pale() ? '#5f9ad2' : '#ffffff');
@@ -1731,6 +1735,12 @@
       d.style.left = Math.min(W - 6, Math.max(6, x)) + 'px'; d.style.top = y + 'px'; g.appendChild(d);
     }));
   }
+  // the guides follow the copy: re-measure when the text reflows (web fonts arriving, phone rotation, address bar)
+  { let gt = 0; const again = () => { clearTimeout(gt); gt = setTimeout(() => { if (W) buildGrid(); }, 60); };
+    new ResizeObserver(again).observe(document.querySelector('.intro'));
+    new ResizeObserver(again).observe(document.querySelector('.headline'));
+    new ResizeObserver(again).observe(hero);
+    if (document.fonts) document.fonts.ready.then(again); }
 
   /* ---------------- state ---------------- */
   const mouse = { x: -999, y: -999, in: false, overUI: false };
@@ -1747,7 +1757,9 @@
     document.getElementById('cy').textContent = String(Math.round(mouse.y)).padStart(4, '0');
   });
   hero.addEventListener('pointerleave', () => { mouse.in = false; });
-  const onScroll = () => { scrollTarget = Math.min(1, Math.max(0, scrollY / (stage.offsetHeight - innerHeight))); };
+  // the stage height is measured on resize, not on every scroll event (reading layout while scrolling is slow on phones)
+  let stageSpan = 0; const measureStage = () => { stageSpan = stage.offsetHeight - innerHeight; };
+  const onScroll = () => { if (!stageSpan) measureStage(); scrollTarget = Math.min(1, Math.max(0, scrollY / Math.max(1, stageSpan))); };
   addEventListener('scroll', onScroll, { passive: true });
 
   function resize() {
@@ -1757,7 +1769,7 @@
     DPR = Math.min(2, devicePixelRatio || 1);
     fx.width = W * SDPR; fx.height = H * SDPR;
     buildPortrait();
-    buildField(); buildGrid(); onScroll();
+    buildField(); buildGrid(); measureStage(); onScroll();
   }
   let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(resize, 150); });
 
@@ -2152,7 +2164,9 @@
     if (!dens) { requestAnimationFrame(frame); return; }
     const ox = mod(drift, PW);
     // the hero sky only while the hero is on screen; once it has gone, clear it once and leave it
-    if (stageVis) { fxClear = false;
+    // touch screens at rest: redraw the sky at ~30 fps (the clouds move in whole pixel steps, so nothing is lost)
+    const restFx = coarse && p === scrollTarget && intro >= 1 && lens.r <= 2 && now - lastFx < 33;
+    if (stageVis && restFx) { /* keep the last frame */ } else if (stageVis) { fxClear = false; lastFx = now;
     ctx.setTransform(SDPR, 0, 0, SDPR, 0, 0);
     ctx.clearRect(0, 0, W, H);
 
@@ -2208,8 +2222,11 @@
 
     // 6. text drifts away
     const fade = smooth(.02, .22, p);
-    ui.style.opacity = 1 - fade;
-    ui.style.transform = `translateY(${-fade * 40}px)`;
+    if (fade !== lastFade) {   // only when it changes; the guide lines move with the copy so they never cut through it
+      lastFade = fade;
+      ui.style.opacity = 1 - fade;
+      ui.style.transform = gridEl.style.transform = fade ? `translateY(${-fade * 40}px)` : '';
+    }
 
     // 7. pixel curtain: squares rise from the bottom and turn into the About background
     // 7. the sky washes to blue-white as we rise; About fades in on top of it
@@ -2239,8 +2256,8 @@
     else { const st = (fillT - fillP) * Math.min(1, dt * 6), mx = dt * .7; fillP += Math.max(-mx, Math.min(mx, st)); }
     const K = 4, nW = fillWords.length;
     fillWords.forEach((sp, i) => {
-      const a = Math.min(1, Math.max(0, (fillP * (nW + K) - i) / K));
-      sp.style.opacity = (.2 + .8 * a).toFixed(3);
+      const a = Math.min(1, Math.max(0, (fillP * (nW + K) - i) / K)), o = (.2 + .8 * a).toFixed(2);
+      if (sp._o !== o) { sp._o = o; sp.style.opacity = o; }   // only touch the words that change
     });
     // camera: zoom out of About onto the canvas → pan down to the Work frame → zoom into it
     const zT = Math.min(1, Math.max(0, (scrolled - vh * 1.35) / (vh * 1.8)));
