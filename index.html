@@ -1084,7 +1084,7 @@
   const DG = { 0: ['111','101','101','101','111'], 1: ['010','110','010','010','111'], 2: ['111','001','111','100','111'], 3: ['111','001','111','001','111'], 4: ['101','101','111','001','001'],
     5: ['111','100','111','001','111'], 6: ['111','100','111','101','111'], 7: ['111','001','010','010','010'], 8: ['111','101','111','101','111'], 9: ['111','101','111','001','111'], '%': ['101','001','010','100','101'] };
   const pc = document.getElementById('ldPc'), PS = 4;
-  const drawPc = n => { let x = 0, o = ''; for (const ch of n + '%') { DG[ch].forEach((row, y) => [...row].forEach((v, i) => { if (v === '1') o += `<rect x="${(x + i) * PS}" y="${y * PS}" width="${PS}" height="${PS}" fill="#fff"/>`; })); x += 4; }
+  const drawPc = n => { let x = 0, o = ''; for (const ch of n + '%') { (DG[ch] || []).forEach((row, y) => [...row].forEach((v, i) => { if (v === '1') o += `<rect x="${(x + i) * PS}" y="${y * PS}" width="${PS}" height="${PS}" fill="#fff"/>`; })); x += 4; }
     pc.setAttribute('width', (x - 1) * PS); pc.setAttribute('height', 5 * PS); pc.setAttribute('viewBox', `0 0 ${(x - 1) * PS} ${5 * PS}`); pc.innerHTML = o; };
   const box = L.querySelector('.ld-box'), veil = L.querySelector('.veil');
   const G = 24, cols = Math.ceil(innerWidth / G), rows = Math.ceil(innerHeight / G);
@@ -1093,9 +1093,12 @@
   L.classList.add('veiled');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, minMs = reduce ? 500 : 1800, t0 = performance.now();
   let loaded = document.readyState === 'complete'; addEventListener('load', () => loaded = true, { once: true });
+  setTimeout(() => { loaded = true; }, 8000);   // a slow network must never keep the loader up forever
   let shown = -1;
-  (function step(now) {
-    const p = Math.min(1, (now - t0) / minMs) * (loaded ? 1 : .92), level = CH - p * (CH + 1.5), t = now / 260;
+  (function step() {
+    // performance.now(), not the rAF timestamp: on phones the first frame's timestamp can be earlier than t0,
+    // which made the progress negative (−1%) and stopped the loader at 0%
+    const now = performance.now(), p = Math.max(0, Math.min(1, (now - t0) / minMs)) * (loaded ? 1 : .92), level = CH - p * (CH + 1.5), t = now / 260;
     for (const c of rects) { const on = c.y + .5 > level + Math.sin(c.x * .7 + t) * .8; if (c.on !== on) { c.on = on; c.r.setAttribute('fill', on ? '#fff' : 'rgba(255,255,255,.2)'); } }
     const n = Math.round(p * 100); if (n !== shown) { shown = n; drawPc(n); }
     if (p < 1) return requestAnimationFrame(step);
