@@ -200,7 +200,9 @@
   }
   #camBack, #camFront { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; display: block; image-rendering: pixelated; }
   #camFront { z-index: 3; }
-  .pin.canvas, .work::before { background-attachment: fixed; }
+  /* dots used to be background-attachment: fixed — that repaints the whole screen on every scroll frame. They now scroll
+     with their layer; --dot-y lines each pattern up with one document-wide 24 px grid so neighbouring layers still match */
+  .work::before { background-position: 0 var(--dot-y, 0); }
   /* the Work section overlaps the pinned frame: its top part stays see-through so it never clips that frame */
   .work::before { content: ""; position: absolute; left: 0; right: 0; top: 62vh; bottom: 0; z-index: -1; }   /* dots stay locked to the screen, so overlapping layers line up */
   .cam { position: absolute; inset: 0; transform-origin: 0 0; pointer-events: none; --inv: 1; }
@@ -291,6 +293,7 @@
     padding: 4vh var(--pad) 0; align-items: start;
   }
   .proj { position: relative; z-index: 1; }
+  .proj.idle .media *, .proj.idle .media *::before, .proj.idle .media *::after { animation-play-state: paused !important; }   /* off screen: covers stop animating */
   /* live canvas: guides, spacing, sticky notes and a teammate's cursor around the cards */
   .projects { position: relative; }
   #live { position: absolute; left: 0; top: 0; pointer-events: none; z-index: 0; }
@@ -388,7 +391,7 @@
   .dive::before {
     content: ""; position: absolute; left: 0; right: 0; top: 60vh; bottom: 0; z-index: -1;
     background-color: #eef5fc; background-image: radial-gradient(rgba(23, 69, 126, .16) 1px, transparent 1.4px);
-    background-size: 24px 24px; background-attachment: fixed;
+    background-size: 24px 24px; background-position: 0 var(--dot-y, 0);
   }
   .dive-pin { position: sticky; top: 0; height: 100vh; overflow: clip; }
   #diveCv { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; display: block; pointer-events: none; image-rendering: pixelated; }   /* drawn at half resolution: the art is on a ≥ 2 px grid */
@@ -418,7 +421,7 @@
     --ink: #fff; --ink-dim: rgba(255, 255, 255, .7); --line: rgba(255, 255, 255, .28); --sky-top: #2a80d6;
     display: grid; grid-template-rows: auto 1fr auto; padding-top: 72px;
   }
-  #ctSky { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; }
+  #ctSky { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; image-rendering: pixelated; }
   .contact > :not(#ctSky):not(.ct-toast):not(.ct-over) { position: relative; z-index: 1; }
   .ct-top { display: grid; grid-template-columns: repeat(4, 1fr); }
   .ct-top .r { grid-column: 4; text-align: right; color: var(--ink-dim); }
@@ -2950,7 +2953,7 @@
 /* ---------------- Contact: sky, pixel clouds, birds you can catch, copy-to-clipboard ---------------- */
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const DPR = Math.min(2, devicePixelRatio || 1);
+  const DPR = 1;   // pixel art: 1 canvas px per CSS px is enough (crisp via image-rendering), 4× less to fill on retina
   const sec = document.getElementById('contact'), cv = document.getElementById('ctSky'), x = cv.getContext('2d');
   const scoreEl = document.getElementById('ctScore'), over = sec.querySelector('.ct-over'), toast = sec.querySelector('.ct-toast');
   const cta = sec.querySelector('.ct-book');   // the game-over nudge points at the main action
@@ -3204,10 +3207,10 @@
 (() => {
   if (matchMedia('(pointer: coarse)').matches) return;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const DPR = Math.min(2, devicePixelRatio || 1);
+  const DPR = 1;   // square-dot lens is pixel art: a full-screen overlay at 1× instead of 2×
   const cv = document.createElement('canvas');
   cv.setAttribute('aria-hidden', 'true');
-  cv.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;z-index:55;pointer-events:none';
+  cv.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;z-index:55;pointer-events:none;image-rendering:pixelated';
   document.body.appendChild(cv);
   const x = cv.getContext('2d');
   const size = () => { cv.width = innerWidth * DPR; cv.height = innerHeight * DPR; };
@@ -3995,6 +3998,26 @@
   document.getElementById('ckOk').onclick = () => { set('ckSeen', '1'); hide(); };
   document.getElementById('ckNo').onclick = () => { set('ckSeen', '1'); set('noCal', '1'); hide(); };
   if (!get('ckSeen')) (window.loaderDone || Promise.resolve()).then(() => setTimeout(() => ck.classList.add('show'), 1400));
+})();
+</script>
+<script>
+/* ---------------- dotted canvas: align every dotted layer to the same document-wide 24 px grid ---------------- */
+(() => {
+  const align = () => {
+    for (const [sel, inset] of [['.work', innerHeight * .62], ['.dive', innerHeight * .6]]) {
+      const el = document.querySelector(sel); if (!el) continue;
+      const top = el.getBoundingClientRect().top + scrollY + inset;     // where the ::before layer starts
+      el.style.setProperty('--dot-y', `${-(top % 24)}px`);
+    }
+  };
+  align(); addEventListener('load', align); addEventListener('resize', align);
+})();
+</script>
+<script>
+/* ---------------- covers: CSS animations run only while their card is on screen ---------------- */
+(() => {
+  const io = new IntersectionObserver(es => es.forEach(e => e.target.closest('.proj').classList.toggle('idle', !e.isIntersecting)), { rootMargin: '10% 0px' });
+  document.querySelectorAll('.projects .proj .media').forEach(m => io.observe(m));
 })();
 </script>
 </body>
