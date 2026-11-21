@@ -1042,7 +1042,7 @@
     .ct-top { grid-template-columns: 1fr auto; }
     .ct-top .r { grid-column: 2; }
     .ct-main { row-gap: 2vh; padding-bottom: 2vh; }
-    #ctDevice { width: min(38vw, 20vh); margin-top: 0; }
+    #ctDevice { width: min(38vw, 20vh); margin-top: 56px; align-self: center; }   /* clear of the pinned nav, centred in the free sky above the headline */
     .ct-head { font-size: clamp(38px, 10.6vw, 56px); }
     .ct-mail { margin-top: 2.4vh; }
     .ct-book.cta.solid { font-size: 24px; padding: 13px 20px 15px; }
@@ -2743,7 +2743,8 @@
   }
 
   // pixel streaks: fixed seeds; depth is a function of the scroll only
-  const N = 260, STREAK_TRAVEL = 7;
+  const LITE = matchMedia('(pointer: coarse), (max-width: 760px)').matches;   // phones: half the streaks, shorter pixel runs
+  const N = LITE ? 120 : 260, STREAK_TRAVEL = 7, RUN = LITE ? 10 : 24;
   const COLS = ['#ffffff', '#cbe8fb', '#9cc8f0', '#5fb4f2', '#ffffff', '#b9d4ff'];
   const st = Array.from({ length: N }, (_, i) => ({ d: hash(i, 1), c: COLS[i % COLS.length], s: 2 + Math.round(hash(i, 2) * 2) * 2 }));
   // design objects flying past: frames with handles, component diamonds, small cursors, pixel clouds
@@ -2761,8 +2762,13 @@
     cells = list;
   }
   let dirty = true;
-  const size = () => { W = innerWidth; H = innerHeight; cv.width = Math.ceil(W * RS); cv.height = Math.ceil(H * RS); buildBg(); buildCells(); dirty = true; };
-  size(); addEventListener('resize', size);
+  const size = () => { W = innerWidth; H = innerHeight; if (!W || !H) return; cv.width = Math.ceil(W * RS); cv.height = Math.ceil(H * RS); buildBg(); buildCells(); dirty = true; };
+  size();
+  let rzT = 0;
+  addEventListener('resize', () => {
+    if (innerWidth === W && Math.abs(innerHeight - H) < 160) return;   // phone address bar showing/hiding while scrolling
+    clearTimeout(rzT); rzT = setTimeout(size, 120);
+  });
 
   let lastQ = -1, lastVis = '', lastPe = '', lastHo = -1, lastBl = -1;
   let qP = 0, qPrev = 0, last = performance.now(), vis = false, curGate = 0;
@@ -2789,7 +2795,7 @@
   function flush() { batch.forEach(b => { if (b.al <= 0) return; x.globalAlpha = b.al; x.fillStyle = b.col; x.fill(b.p); }); batch = new Map(); }
   // a line of square pixels; long lines use fewer, stretched pixels so the count stays small
   function pixLine(x1, y1, x2, y2, s, path) {
-    const dx = x2 - x1, dy = y2 - y1, n = Math.max(1, Math.min(24, Math.ceil(Math.hypot(dx, dy) / s)));
+    const dx = x2 - x1, dy = y2 - y1, n = Math.max(1, Math.min(RUN, Math.ceil(Math.hypot(dx, dy) / s)));
     const ew = Math.max(s, Math.ceil(Math.abs(dx) / n / s) * s), eh = Math.max(s, Math.ceil(Math.abs(dy) / n / s) * s);
     for (let k = 0; k <= n; k++) {
       const t = k / n;
@@ -3047,7 +3053,7 @@
   dcv.addEventListener('pointerleave', () => { devHover = false; });
   dcv.addEventListener('click', () => sec.querySelector('.ct-copy').click());
   function drawDevice(now) {
-    const shown = getComputedStyle(sec).visibility === 'visible';
+    const shown = sec.style.visibility === 'visible';
     if (shown && !wasShown) { typeStart = now + 500; screenText = '> CONTACT'; }
     wasShown = shown;
     if (!shown) return;
