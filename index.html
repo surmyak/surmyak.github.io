@@ -2063,7 +2063,7 @@
     pw = pcan.offsetWidth; ph = pcan.offsetHeight;
     if (!pw || !ph) return;
     pcan.width = pw * DPR; pcan.height = ph * DPR;
-    PP = Math.max(4, Math.round(pw / 130));   // fine grid so eyes, brows and mouth read
+    PP = Math.max(3, Math.round(pw / 150));   // fine grid so eyes, brows and mouth read
     pcols = Math.floor(pw / PP); prows = Math.floor(ph / PP);
     const off = document.createElement('canvas');
     off.width = pcols; off.height = prows;
@@ -2084,7 +2084,7 @@
         if (ii >= 0 && jj >= 0 && ii < pcols && jj < prows) { sum += lum[jj * pcols + ii]; n++; }
       }
       const k = j * pcols + i;
-      sharp[k] = Math.min(1, Math.max(0, lum[k] + .9 * (lum[k] - sum / n)));
+      sharp[k] = Math.min(1, Math.max(0, lum[k] + 1.4 * (lum[k] - sum / n)));
     }
     for (let k = 0; k < pt.length; k++) {
       const L = sharp[k];
@@ -2093,7 +2093,7 @@
       const head = ((u - .5) / .3) ** 2 + ((v - .36) / .3) ** 2;
       const body = ((u - .5) / .58) ** 2 + ((v - 1.02) / .5) ** 2;
       const mask = 1 - smooth(.75, 1.15, Math.min(head, body));
-      pt[k] = Math.pow(smooth(.18, .84, 1 - L), 1.05) * mask;   // dark → big blue dot
+      pt[k] = Math.pow(smooth(.16, .86, 1 - L), 1.1) * mask;   // dark → big blue dot
     }
   }
   function drawPortrait(now) {
@@ -2124,13 +2124,13 @@
           // shimmer: small clusters of dots turn into square pixels and back, wandering over the photo,
           // the rest breathe gently on their own
           const cl = reduce ? 0 : vnoise(i * .22 + tt * .9, j * .22 - tt * .6) * vnoise(i * .5 - tt * 1.7, j * .5);
-          const flick = !reduce && (cl > .62 || cellHash(i + tick * 31, j - tick * 17) > .992);
+          const flick = !reduce && (cl > .7 || cellHash(i + tick * 31, j - tick * 17) > .994);
           if (flick) {
             const s = Math.max(1, Math.round((PP - 1) * Math.sqrt(t)));
             sq.rect(i * PP + ((PP - s) >> 1), j * PP + ((PP - s) >> 1), s, s);
             continue;
           }
-          const sh = reduce ? 0 : (vnoise(i * .14 + tt * .5, j * .14 - tt * .3) - .5) * .32;
+          const sh = reduce ? 0 : (vnoise(i * .14 + tt * .5, j * .14 - tt * .3) - .5) * .16;
           const rad = Math.min(PP * .58, PP * .5 * Math.sqrt(t) * (1 + sh));
           dots.moveTo(cx + rad, cy); dots.arc(cx, cy, rad, 0, Math.PI * 2);
         }
