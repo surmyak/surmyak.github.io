@@ -1021,6 +1021,9 @@
     .bottom .live { min-width: 0; white-space: nowrap; overflow: hidden; }
     .bottom .wx { display: none; }   /* phones: time and temperature only */
     .bottom .cta { font-size: 22px; }
+    /* phones: 100vh is the height with the browser bars hidden, so the bottom row (and Let's talk) sat under the address bar;
+       svh is the part you actually see when the page opens */
+    .hero { height: 100vh; height: 100svh; min-height: 0; }
     /* about: portrait on top, statement below */
     .about { grid-template-columns: 1fr; grid-template-rows: auto auto 1fr; }
     .about::before { display: none; }
@@ -1683,13 +1686,15 @@
   birds.forEach(b => { b.x = null; b.dir = 1; b.bank = 0; });
   const angTo = (from, to) => Math.atan2(Math.sin(to - from), Math.cos(to - from));
   function stepBird(b, t, dt) {
-    if (b.x === null) { b.x = b.fx * W; b.y = b.fy * H; }
+    // phones: the copy fills the top of the sky, so the birds keep to the band between the guide line and the headline
+    const phone = W < 901, by0 = phone ? H * .5 : H * .14, by1 = phone ? H * .57 : H * .5;
+    if (b.x === null) { b.x = b.fx * W; b.y = phone ? (by0 + by1) / 2 : b.fy * H; }
     // wander
     let turn = (vnoise(t * .35, b.seed) - .5) * 3.2;
     // stay inside the sky box
-    const x0 = W * .06, x1 = W * .94, y0 = H * .14, y1 = H * .5;
+    const x0 = W * .06, x1 = W * .94, y0 = by0, y1 = by1;
     if (b.x < x0 || b.x > x1 || b.y < y0 || b.y > y1) {
-      const want = Math.atan2(H * .32 - b.y, W * .5 - b.x);
+      const want = Math.atan2((by0 + by1) / 2 - b.y, W * .5 - b.x);
       turn += angTo(b.h, want) * 2.2;
     }
     // swerve away from the cursor
@@ -1714,7 +1719,7 @@
     const f = 1 - flapping * (.5 - .5 * Math.cos(t * b.flap));
     const shp = birdShape(1.25 * (.68 + .32 * f));
 
-    const c = b.c, L = b.L, R = L * 1.4;
+    const c = b.c, L = b.L * (W < 901 ? .7 : 1), R = L * 1.4;   // phones: smaller birds for the narrower band of sky
     const tilt = (-34 + b.bank * 24) * Math.PI / 180;
     const co = Math.cos(tilt), si = Math.sin(tilt);
     ctx.globalAlpha = alpha;
