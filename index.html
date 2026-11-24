@@ -600,7 +600,7 @@
   /* in-phone motion: the list scrolls, a finger taps a visit, the details page pushes in, then Back */
   .ca-view { position: absolute; left: 0; right: 0; top: 113px; bottom: 0; overflow: hidden; }
   .ca-main { transition: transform .9s cubic-bezier(.3, .7, .2, 1); }
-  .ca-view.scroll .ca-main { transform: translateY(-150px); }
+  .ca-view.ca-scroll .ca-main { transform: translateY(-150px); }   /* not .scroll: that is the hero's "Scroll" hint (flex, dim ink) and made the list shrink */
   .ca-view.push .ca-main, .ca-view.back .ca-main { transition: transform .45s cubic-bezier(.3, .7, .2, 1); }
   .ca-view.push .ca-main { transform: translateX(-28%); }
   .ca-view.reset, .ca-view.reset * { transition: none !important; }   /* loop restart: jump straight to the list */
@@ -3508,8 +3508,8 @@
       try { while (true) {
         view.className = 'ca-view reset'; tap.className = 'ca-tap'; view.offsetWidth; view.classList.remove('reset');
         await wait(900);
-        view.classList.add('scroll'); await wait(1300);                          // scroll down the rota
-        view.classList.remove('scroll'); await wait(1000);                       // and back up
+        view.classList.add('ca-scroll'); await wait(1300);                       // scroll down the rota
+        view.classList.remove('ca-scroll'); await wait(1000);                    // and back up
         moveTo(card, 250, 40); tap.classList.add('on'); await wait(450);
         moveTo(card, 200, 40); await wait(550);                                  // finger settles on the started visit
         tap.classList.add('down'); card.classList.add('press'); await wait(180);
